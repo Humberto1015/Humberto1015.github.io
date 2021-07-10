@@ -8,6 +8,17 @@
     <language>zh-tw</language>
     <lastBuildDate>Tue, 29 Oct 2019 13:49:23 +0600</lastBuildDate><atom:link href="https://Humberto1015.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Median Handler</title>
+      <link>https://Humberto1015.github.io/blog/post-3/</link>
+      <pubDate>Sat, 10 Jul 2021 13:21:47 +0800</pubDate>
+      
+      <guid>https://Humberto1015.github.io/blog/post-3/</guid>
+      <description>題目簡介 要你設計一個Handler，必須包含兩個方法：insert與getMedian。insert方法可以用來新增integer到我們的資料結構內，而題目要求getMedian方法必須在O(1)的時間複雜度內回傳資料結構中的中位數。
+想法 我們首先從資料結構開始思考，如果利用一個array來存資料，為了確保能夠在O(1)的時間複雜度內回傳array中的中位數，則每次insert的時候都需要做排序，這題沒辦法使用counting sort，因為我們並不知道data的範圍，所以如果要做排序的話，我們假設排序所需的時間複雜度為O(nlogn)。
+那有沒有更快的方式呢？仔細去思考的話可以發現，要求算中位數，我們並不需要讓整個array是排序好的狀態，可以試著將資料分成兩半，分別是比較小的一半A，以及比較大的一半B，並確保兩這兩半資料的個數相差不超過1，接著我們需要能夠取得A裡面的最大元素以及B裡面的最小元素，如此一來就可以求算中位數了。為了達到這個目的，我們需要Maintain兩個heaps，分別是Max Heap與Min Heap，Max Heap內存的是最小的元素們，Min Heap內存的是最大的元素們，每次insert完，需要對整個結構做一次balance，並更新median的值，之後便可以用O(1)的時間複雜度存取。</description>
+    </item>
+    
+    <item>
       <title>Min Heap Construction</title>
       <link>https://Humberto1015.github.io/blog/post-1/</link>
       <pubDate>Sun, 27 Jun 2021 14:33:47 +0800</pubDate>
