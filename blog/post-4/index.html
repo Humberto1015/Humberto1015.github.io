@@ -5,7 +5,7 @@
 
   <!-- mobile responsive meta -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="利用Heap來找中位數">
+  <meta name="description" content="去年畢業前，我在Udemy買了一堂iOS Development的線上課程，但是最近才又開始認真上課，也體驗到SwiftUI的強大。">
   <meta name="author" content="Han">
   <meta name="generator" content="Hugo 0.84.1" />
 
@@ -109,30 +109,91 @@
     <div class="row">
       <div class="col-lg-10 mx-auto">
         
-        <a href="/categories/computer-science"
-          class="text-primary">Computer science</a>
+        <a href="/categories/ios-development"
+          class="text-primary">Ios development</a>
         
-        <h2>Median Handler</h2>
+        <h2>SwiftUI初體驗！ List + Dcard API</h2>
         <div class="mb-3 post-meta">
           <span>By Han</span>
           
           <span class="border-bottom border-primary px-2 mx-1"></span>
-          <span>10 July 2021</span>
+          <span>25 July 2021</span>
           
         </div>
         
         <div class="content mb-5">
-          <h5 id="題目簡介">題目簡介</h5>
-<p>要你設計一個Handler，必須包含兩個方法： <code>insert</code> 與 <code>getMedian</code> 。 <code>insert</code> 方法可以用來新增integer到我們的資料結構內，而題目要求 <code>getMedian</code> 方法必須在O(1)的時間複雜度內回傳資料結構中的中位數。</p>
-<h5 id="想法">想法</h5>
-<p>我們首先從資料結構開始思考，如果利用一個array來存資料，為了確保能夠在O(1)的時間複雜度內回傳array中的中位數，則每次insert的時候都需要做排序，這題沒辦法使用counting sort，因為我們並不知道data的範圍，所以如果要做排序的話，我們假設排序所需的時間複雜度為O(nlogn)。</p>
-<p>那有沒有更快的方式呢？仔細去思考的話可以發現，要求算中位數，我們並不需要讓整個array是排序好的狀態，可以試著將資料分成兩半，分別是比較小的一半A，以及比較大的一半B，並確保兩這兩半資料的個數相差不超過1，接著我們需要能夠取得A裡面的最大元素以及B裡面的最小元素，如此一來就可以求算中位數了。為了達到這個目的，我們需要Maintain兩個heaps，分別是Max Heap與Min Heap，Max Heap內存的是最小的元素們，Min Heap內存的是最大的元素們，每次insert完，需要對整個結構做一次balance，並更新median的值，之後便可以用O(1)的時間複雜度存取。</p>
-<h5 id="複雜度">複雜度</h5>
-<ul>
-<li><code>insert</code> : O(logn)</li>
-<li><code>getMedian</code> : O(1)</li>
-</ul>
-<h5 id="實作">實作</h5>
+          <h5 id="目標">目標</h5>
+<p>既然是第一個APP，那就用Dcard API來撈一些資料，並使用SwiftUI來呈現這些資料吧！</p>
+<h5 id="view-的部分">View 的部分</h5>
+<p>View的部分，我使用了List來呈現利用Dcard API撈到的文章標題。 <code>NetworkManager</code> 是我用來處理API抓取資料的事情，後面會提到。</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 0
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#080;font-weight:bold">struct</span> <span style="color:#b06;font-weight:bold">ContentView</span>: View {
+    
+    @ObservedObject <span style="color:#080;font-weight:bold">var</span> <span style="color:#963">networkManager</span> = NetworkManager()
+    
+    <span style="color:#080;font-weight:bold">var</span> <span style="color:#963">body</span>: some View {
+        NavigationView {
+            List(networkManager.posts) { post <span style="color:#080;font-weight:bold">in</span>
+                VStack(alignment: .leading) {
+                    Text(post.title)
+                }
+            }.navigationBarTitle(<span style="background-color:#fff0f0">&#34;Posts&#34;</span>)
+        }.onAppear {
+            networkManager.fetchPost()
+        }
+    }
+}
+
+<span style="color:#080;font-weight:bold">struct</span> <span style="color:#b06;font-weight:bold">ContentView_Previews</span>: PreviewProvider {
+    <span style="color:#080;font-weight:bold">static</span> <span style="color:#080;font-weight:bold">var</span> <span style="color:#963">previews</span>: some View {
+        ContentView()
+    }
+}
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="data-的部分">Data 的部分</h5>
+<p>此處是定義文章的資料結構，加上 <code>Decodable</code> protocol 是因為要使用JSONDecoder，將抓取到的資料Decode成我們希望的形式，而 <code>Identifiable</code> protocol 則是會賦予這個結構一個 <code>id</code> 屬性，方便搭配 <code>ForEach</code> 或 <code>List</code>。</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">0
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#080;font-weight:bold">struct</span> <span style="color:#b06;font-weight:bold">Post</span>: Decodable, Identifiable {
+    <span style="color:#080;font-weight:bold">let</span> <span style="color:#963">id</span>: <span style="color:#007020">Int</span>
+    <span style="color:#080;font-weight:bold">let</span> <span style="color:#963">title</span>: <span style="color:#007020">String</span>
+}
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="networking-使用dcard-api抓取資料">Networking： 使用Dcard API抓取資料</h5>
+<p>這裡要注意 <code>@Published</code> 與前面所提到的 <code>@ObservedObject</code>。</p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
 <pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 0
@@ -164,61 +225,37 @@
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">29
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">30
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">31
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">32
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">33
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">34
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">35
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">36
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">37
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">38
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">39
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">40
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-c++" data-lang="c++"><span style="color:#579">#include</span> <span style="color:#579">&lt;queue&gt;</span><span style="color:#579">
-</span><span style="color:#579"></span>
-<span style="color:#080;font-weight:bold">using</span> <span style="color:#080;font-weight:bold">namespace</span> std;
-
-<span style="color:#080;font-weight:bold">class</span> <span style="color:#b06;font-weight:bold">MedianHandler</span> {
-<span style="color:#080;font-weight:bold">private</span><span style="color:#333">:</span>
-	<span style="color:#339;font-weight:bold">double</span> median;
-	<span style="color:#888">// Max Heap
-</span><span style="color:#888"></span>	priority_queue<span style="color:#333">&lt;</span><span style="color:#339;font-weight:bold">int</span><span style="color:#333">&gt;</span> maxHeap;
-	<span style="color:#888">// Min Heap
-</span><span style="color:#888"></span>	priority_queue<span style="color:#333">&lt;</span><span style="color:#339;font-weight:bold">int</span>, vector<span style="color:#333">&lt;</span><span style="color:#339;font-weight:bold">int</span><span style="color:#333">&gt;</span>, greater<span style="color:#333">&lt;</span><span style="color:#339;font-weight:bold">int</span><span style="color:#333">&gt;&gt;</span> minHeap;
-<span style="color:#080;font-weight:bold">public</span><span style="color:#333">:</span>
-	MedianHandler() {
-	}
-	
-  <span style="color:#339;font-weight:bold">void</span> <span style="color:#06b;font-weight:bold">insert</span>(<span style="color:#339;font-weight:bold">int</span> number) {
-		<span style="color:#888">// 1. push
-</span><span style="color:#888"></span>		<span style="color:#080;font-weight:bold">if</span> (maxHeap.empty()) maxHeap.push(number);
-		<span style="color:#080;font-weight:bold">else</span> number <span style="color:#333">&gt;</span> maxHeap.top() <span style="color:#333">?</span> minHeap.push(number) <span style="color:#333">:</span> maxHeap.push(number);
-		
-		<span style="color:#888">// 2. check balance
-</span><span style="color:#888"></span>		<span style="color:#080;font-weight:bold">if</span> (minHeap.size() <span style="color:#333">-</span> maxHeap.size() <span style="color:#333">==</span> <span style="color:#00d;font-weight:bold">2</span>) {
-			maxHeap.push(minHeap.top());
-			minHeap.pop();
-		}
-		<span style="color:#080;font-weight:bold">if</span> (maxHeap.size() <span style="color:#333">-</span> minHeap.size() <span style="color:#333">==</span> <span style="color:#00d;font-weight:bold">2</span>) {
-			minHeap.push(maxHeap.top());
-			maxHeap.pop();
-		}
-		<span style="color:#888">// 3. update median
-</span><span style="color:#888"></span>		<span style="color:#080;font-weight:bold">if</span> (minHeap.size() <span style="color:#333">==</span> maxHeap.size()) {
-			median <span style="color:#333">=</span> (<span style="color:#339;font-weight:bold">double</span>)(minHeap.top() <span style="color:#333">+</span> maxHeap.top()) <span style="color:#333">/</span> <span style="color:#00d;font-weight:bold">2</span>;
-		}
-		<span style="color:#080;font-weight:bold">else</span> {
-			median <span style="color:#333">=</span> minHeap.size() <span style="color:#333">&gt;</span> maxHeap.size() <span style="color:#333">?</span> minHeap.top() <span style="color:#333">:</span> maxHeap.top();
-		}
-	}
-	
-  <span style="color:#339;font-weight:bold">double</span> <span style="color:#06b;font-weight:bold">getMedian</span>() { <span style="color:#080;font-weight:bold">return</span> median; }
-};
-
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#080;font-weight:bold">class</span> <span style="color:#b06;font-weight:bold">NetworkManager</span>: ObservableObject {
+    
+    <span style="color:#080;font-weight:bold">let</span> <span style="color:#963">dcardURL</span> = <span style="background-color:#fff0f0">&#34;https://www.dcard.tw/service/api/v2/posts&#34;</span>
+    @Published <span style="color:#080;font-weight:bold">var</span> <span style="color:#963">posts</span> = [Post]()
+    
+    <span style="color:#080;font-weight:bold">func</span> <span style="color:#06b;font-weight:bold">fetchPost</span>() {
+        performRequest(urlString: dcardURL)
+    }
+    
+    <span style="color:#080;font-weight:bold">func</span> <span style="color:#06b;font-weight:bold">performRequest</span>(urlString: <span style="color:#007020">String</span>) {
+        <span style="color:#080;font-weight:bold">if</span> <span style="color:#080;font-weight:bold">let</span> <span style="color:#963">url</span> = URL(string: urlString) {
+            <span style="color:#080;font-weight:bold">let</span> <span style="color:#963">session</span> = URLSession(configuration: .<span style="color:#080;font-weight:bold">default</span>)
+            <span style="color:#080;font-weight:bold">let</span> <span style="color:#963">task</span> = session.dataTask(with: url) { (data, response, error) <span style="color:#080;font-weight:bold">in</span>
+                <span style="color:#080;font-weight:bold">if</span> error == <span style="color:#080;font-weight:bold">nil</span> {
+                    <span style="color:#080;font-weight:bold">let</span> <span style="color:#963">decoder</span> = JSONDecoder()
+                    <span style="color:#080;font-weight:bold">if</span> <span style="color:#080;font-weight:bold">let</span> <span style="color:#963">data</span> = data {
+                        <span style="color:#080;font-weight:bold">do</span> {
+                            <span style="color:#080;font-weight:bold">let</span> <span style="color:#963">results</span> = <span style="color:#080;font-weight:bold">try</span> decoder.decode([Post].<span style="color:#080;font-weight:bold">self</span>, from: data)
+                            <span style="color:#080;font-weight:bold">self</span>.posts = results
+                        } <span style="color:#080;font-weight:bold">catch</span> {
+                            print (error)
+                        }
+                    }
+                }
+            }
+            task.resume()
+        }
+    }
+}
 </code></pre></td></tr></table>
 </div>
 </div>
