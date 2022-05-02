@@ -5,7 +5,7 @@
 
   <!-- mobile responsive meta -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="去年畢業前，我在Udemy買了一堂iOS Development的線上課程，但是最近才又開始認真上課，也體驗到SwiftUI的強大。">
+  <meta name="description" content="初學Java，發現這是一個非常OOP的程式語言，我也因此意識到以前不常關注的Design Pattern，本文淺淺地探討一下Singleton Pattern。">
   <meta name="author" content="Han">
   <meta name="generator" content="Hugo 0.84.1" />
 
@@ -116,88 +116,100 @@
         <a href="/categories/computer-science"
           class="text-primary">Computer science</a>
         
-        <h2>SwiftUI初體驗！ List + Dcard API</h2>
+        <h2>淺談Singleton Pattern</h2>
         <div class="mb-3 post-meta">
           <span>By Han</span>
           
           <span class="border-bottom border-primary px-2 mx-1"></span>
-          <span>25 July 2021</span>
+          <span>02 May 2022</span>
           
         </div>
         
         <div class="content mb-5">
-          <h5 id="目標">目標</h5>
-<p>既然是第一個APP，那就用Dcard API來撈一些資料，並使用SwiftUI來呈現這些資料吧！</p>
-<h5 id="view-的部分">View 的部分</h5>
-<p>View的部分，我使用了List來呈現利用Dcard API撈到的文章標題。 <code>NetworkManager</code> 是我用來處理API抓取資料的事情，後面會提到。</p>
-<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
-<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 0
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">16
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
-</span></code></pre></td>
-<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#080;font-weight:bold">struct</span> <span style="color:#b06;font-weight:bold">ContentView</span>: View {
-    
-    @ObservedObject <span style="color:#080;font-weight:bold">var</span> <span style="color:#963">networkManager</span> = NetworkManager()
-    
-    <span style="color:#080;font-weight:bold">var</span> <span style="color:#963">body</span>: some View {
-        NavigationView {
-            List(networkManager.posts) { post <span style="color:#080;font-weight:bold">in</span>
-                VStack(alignment: .leading) {
-                    Text(post.title)
-                }
-            }.navigationBarTitle(<span style="background-color:#fff0f0">&#34;Posts&#34;</span>)
-        }.onAppear {
-            networkManager.fetchPost()
-        }
-    }
-}
-
-<span style="color:#080;font-weight:bold">struct</span> <span style="color:#b06;font-weight:bold">ContentView_Previews</span>: PreviewProvider {
-    <span style="color:#080;font-weight:bold">static</span> <span style="color:#080;font-weight:bold">var</span> <span style="color:#963">previews</span>: some View {
-        ContentView()
-    }
-}
-</code></pre></td></tr></table>
-</div>
-</div><h5 id="data-的部分">Data 的部分</h5>
-<p>此處是定義文章的資料結構，加上 <code>Decodable</code> protocol 是因為要使用JSONDecoder，將抓取到的資料Decode成我們希望的形式，而 <code>Identifiable</code> protocol 則是會賦予這個結構一個 <code>id</code> 屬性，方便搭配 <code>ForEach</code> 或 <code>List</code>。</p>
+          <p>假設我們正在開發後端的某些功能，需要一個Object來提供給客戶的服務：像是新增用戶、取得用戶資料、取得所有用戶等等，我們可以把這些功能都包在一個叫CustomerService的Class裡。</p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
 <pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">0
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">8
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#080;font-weight:bold">struct</span> <span style="color:#b06;font-weight:bold">Post</span>: Decodable, Identifiable {
-    <span style="color:#080;font-weight:bold">let</span> <span style="color:#963">id</span>: <span style="color:#007020">Int</span>
-    <span style="color:#080;font-weight:bold">let</span> <span style="color:#963">title</span>: <span style="color:#007020">String</span>
-}
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">class</span> <span style="color:#b06;font-weight:bold">CustomerService</span> <span style="color:#333">{</span>
+  <span style="color:#080;font-weight:bold">private</span> <span style="color:#080;font-weight:bold">static</span> <span style="color:#080;font-weight:bold">final</span> LinkedList<span style="color:#333">&lt;</span>Customer<span style="color:#333">&gt;</span> customers <span style="color:#333">=</span> <span style="color:#080;font-weight:bold">new</span> LinkedList<span style="color:#333">&lt;&gt;();</span>
+  <span style="color:#080;font-weight:bold">public</span> <span style="color:#06b;font-weight:bold">CustomerService</span><span style="color:#333">()</span> <span style="color:#333">{}</span>
+
+  <span style="color:#888">// add methods here
+</span><span style="color:#888"></span>  <span style="color:#888">// 1. add customer
+</span><span style="color:#888"></span>  <span style="color:#888">// 2. get customer by email
+</span><span style="color:#888"></span>  <span style="color:#888">// 3. get all customers
+</span><span style="color:#888"></span><span style="color:#333">}</span>
 </code></pre></td></tr></table>
 </div>
-</div><h5 id="networking-使用dcard-api抓取資料">Networking： 使用Dcard API抓取資料</h5>
-<p>這裡要注意 <code>@Published</code> 與前面所提到的 <code>@ObservedObject</code>。</p>
+</div><p>這樣的寫法有一個缺點，那就是每個調用它的人都需要new一個新的CustomerService Object出來，但事實上，我們只需要一個Global的CustomerService Object來提供服務就足夠了。</p>
+<p>這個時候就可以運用Singleton Design Pattern，將此Class寫成以下這個樣子：</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 0
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 4
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 5
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 6
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 7
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 8
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 9
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">10
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">11
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">12
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">13
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">14
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">15
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">final</span> <span style="color:#080;font-weight:bold">class</span> <span style="color:#b06;font-weight:bold">CustomerService</span> <span style="color:#333">{</span>
+
+    <span style="color:#080;font-weight:bold">private</span> <span style="color:#080;font-weight:bold">static</span> <span style="color:#080;font-weight:bold">final</span> LinkedList<span style="color:#333">&lt;</span>Customer<span style="color:#333">&gt;</span> customers <span style="color:#333">=</span> <span style="color:#080;font-weight:bold">new</span> LinkedList<span style="color:#333">&lt;&gt;();</span>
+    <span style="color:#080;font-weight:bold">private</span> <span style="color:#080;font-weight:bold">static</span> CustomerService INSTANCE<span style="color:#333">;</span>
+    <span style="color:#080;font-weight:bold">private</span> <span style="color:#06b;font-weight:bold">CustomerService</span><span style="color:#333">()</span> <span style="color:#333">{}</span>
+    <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">static</span> CustomerService <span style="color:#06b;font-weight:bold">getInstance</span><span style="color:#333">()</span> <span style="color:#333">{</span>
+        <span style="color:#080;font-weight:bold">if</span> <span style="color:#333">(</span>INSTANCE <span style="color:#333">==</span> <span style="color:#080;font-weight:bold">null</span><span style="color:#333">)</span> <span style="color:#333">{</span>
+            INSTANCE <span style="color:#333">=</span> <span style="color:#080;font-weight:bold">new</span> CustomerService<span style="color:#333">();</span>
+        <span style="color:#333">}</span>
+        <span style="color:#080;font-weight:bold">return</span> INSTANCE<span style="color:#333">;</span>
+    <span style="color:#333">}</span>
+    <span style="color:#888">// add methods here
+</span><span style="color:#888"></span>    <span style="color:#888">// 1. add customer
+</span><span style="color:#888"></span>    <span style="color:#888">// 2. get customer by email
+</span><span style="color:#888"></span>    <span style="color:#888">// 3. get all customers
+</span><span style="color:#888"></span><span style="color:#333">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>從上面的寫法可知，我們其實可以只在第一次被呼叫的時候再建立Object，如果Object已被建立過，只需要直接return即可，在單執行緒的情況下，這可以確保我們每次操作這個CustomerService都是用同一個實體。</p>
+<p>以下用一個簡易的旅館訂房系統來說明如何調用這個Global的CustomerService，我們可以直接呼叫getInstance Method來取得該Object。</p>
+<div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">0
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">1
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">2
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">3
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">4
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">class</span> <span style="color:#b06;font-weight:bold">HotelResource</span> <span style="color:#333">{</span>
+    <span style="color:#080;font-weight:bold">private</span> <span style="color:#080;font-weight:bold">static</span> <span style="color:#080;font-weight:bold">final</span> CustomerService customerService <span style="color:#333">=</span> CustomerService<span style="color:#333">.</span><span style="color:#00c">getInstance</span><span style="color:#333">();</span>
+
+    <span style="color:#888">// Impelemets other methods here
+</span><span style="color:#888"></span><span style="color:#333">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>但如果是在多執行緒的情況下，仍然可能發生CustomerService被new多於一次的情況，所以可再將該Class稍作改寫：</p>
 <div class="highlight"><div style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
 <table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
 <pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 0
@@ -220,49 +232,32 @@
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">17
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">18
 </span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">19
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">20
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">21
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">22
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">23
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">24
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">25
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">26
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">27
-</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">28
 </span></code></pre></td>
 <td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
-<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-swift" data-lang="swift"><span style="color:#080;font-weight:bold">class</span> <span style="color:#b06;font-weight:bold">NetworkManager</span>: ObservableObject {
-    
-    <span style="color:#080;font-weight:bold">let</span> <span style="color:#963">dcardURL</span> = <span style="background-color:#fff0f0">&#34;https://www.dcard.tw/service/api/v2/posts&#34;</span>
-    @Published <span style="color:#080;font-weight:bold">var</span> <span style="color:#963">posts</span> = [Post]()
-    
-    <span style="color:#080;font-weight:bold">func</span> <span style="color:#06b;font-weight:bold">fetchPost</span>() {
-        performRequest(urlString: dcardURL)
-    }
-    
-    <span style="color:#080;font-weight:bold">func</span> <span style="color:#06b;font-weight:bold">performRequest</span>(urlString: <span style="color:#007020">String</span>) {
-        <span style="color:#080;font-weight:bold">if</span> <span style="color:#080;font-weight:bold">let</span> <span style="color:#963">url</span> = URL(string: urlString) {
-            <span style="color:#080;font-weight:bold">let</span> <span style="color:#963">session</span> = URLSession(configuration: .<span style="color:#080;font-weight:bold">default</span>)
-            <span style="color:#080;font-weight:bold">let</span> <span style="color:#963">task</span> = session.dataTask(with: url) { (data, response, error) <span style="color:#080;font-weight:bold">in</span>
-                <span style="color:#080;font-weight:bold">if</span> error == <span style="color:#080;font-weight:bold">nil</span> {
-                    <span style="color:#080;font-weight:bold">let</span> <span style="color:#963">decoder</span> = JSONDecoder()
-                    <span style="color:#080;font-weight:bold">if</span> <span style="color:#080;font-weight:bold">let</span> <span style="color:#963">data</span> = data {
-                        <span style="color:#080;font-weight:bold">do</span> {
-                            <span style="color:#080;font-weight:bold">let</span> <span style="color:#963">results</span> = <span style="color:#080;font-weight:bold">try</span> decoder.decode([Post].<span style="color:#080;font-weight:bold">self</span>, from: data)
-                            <span style="color:#080;font-weight:bold">self</span>.posts = results
-                        } <span style="color:#080;font-weight:bold">catch</span> {
-                            print (error)
-                        }
-                    }
-                }
-            }
-            task.resume()
-        }
-    }
-}
+<pre style="background-color:#fff;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-java" data-lang="java"><span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">final</span> <span style="color:#080;font-weight:bold">class</span> <span style="color:#b06;font-weight:bold">CustomerService</span> <span style="color:#333">{</span>
+
+    <span style="color:#080;font-weight:bold">private</span> <span style="color:#080;font-weight:bold">static</span> <span style="color:#080;font-weight:bold">final</span> LinkedList<span style="color:#333">&lt;</span>Customer<span style="color:#333">&gt;</span> customers <span style="color:#333">=</span> <span style="color:#080;font-weight:bold">new</span> LinkedList<span style="color:#333">&lt;&gt;();</span>
+    <span style="color:#080;font-weight:bold">private</span> <span style="color:#080;font-weight:bold">static</span> CustomerService INSTANCE<span style="color:#333">;</span>
+    <span style="color:#080;font-weight:bold">private</span> <span style="color:#06b;font-weight:bold">CustomerService</span><span style="color:#333">()</span> <span style="color:#333">{}</span>
+    <span style="color:#080;font-weight:bold">public</span> <span style="color:#080;font-weight:bold">static</span> CustomerService <span style="color:#06b;font-weight:bold">getInstance</span><span style="color:#333">()</span> <span style="color:#333">{</span>
+        <span style="color:#080;font-weight:bold">if</span> <span style="color:#333">(</span>INSTANCE <span style="color:#333">==</span> <span style="color:#080;font-weight:bold">null</span><span style="color:#333">)</span> <span style="color:#333">{</span>
+            <span style="color:#080;font-weight:bold">synchronized</span><span style="color:#333">(</span>CutomerService<span style="color:#333">.</span><span style="color:#00c">class</span><span style="color:#333">){</span>
+                <span style="color:#080;font-weight:bold">if</span><span style="color:#333">(</span>instance <span style="color:#333">==</span> <span style="color:#080;font-weight:bold">null</span><span style="color:#333">){</span>
+                    instance <span style="color:#333">=</span> <span style="color:#080;font-weight:bold">new</span> CustomerService<span style="color:#333">();</span>
+                <span style="color:#333">}</span>    
+            <span style="color:#333">}</span>
+        <span style="color:#333">}</span>
+        <span style="color:#080;font-weight:bold">return</span> INSTANCE<span style="color:#333">;</span>
+    <span style="color:#333">}</span>
+    <span style="color:#888">// add methods here
+</span><span style="color:#888"></span>    <span style="color:#888">// 1. add customer
+</span><span style="color:#888"></span>    <span style="color:#888">// 2. get customer by email
+</span><span style="color:#888"></span>    <span style="color:#888">// 3. get all customers
+</span><span style="color:#888"></span><span style="color:#333">}</span>
 </code></pre></td></tr></table>
 </div>
-</div>
+</div><p>如此一來，就可以確保在多執行緒的情況下，始終最多只有一個CustomerService實體（如果該Service沒有被調用，則不會建立實體）</p>
+
         </div>
 
         

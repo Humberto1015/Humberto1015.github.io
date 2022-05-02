@@ -6,7 +6,17 @@
     <description>Recent content on Han&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-tw</language>
-    <lastBuildDate>Sun, 25 Jul 2021 13:21:47 +0800</lastBuildDate><atom:link href="https://Humberto1015.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 02 May 2022 22:40:03 +0800</lastBuildDate><atom:link href="https://Humberto1015.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>淺談Singleton Pattern</title>
+      <link>https://Humberto1015.github.io/blog/post-5/</link>
+      <pubDate>Mon, 02 May 2022 22:40:03 +0800</pubDate>
+      
+      <guid>https://Humberto1015.github.io/blog/post-5/</guid>
+      <description>假設我們正在開發後端的某些功能，需要一個Object來提供給客戶的服務：像是新增用戶、取得用戶資料、取得所有用戶等等，我們可以把這些功能都包在一個叫CustomerService的Class裡。
+0 1 2 3 4 5 6 7 8  public class CustomerService { private static final LinkedList&amp;lt;Customer&amp;gt; customers = new LinkedList&amp;lt;&amp;gt;(); public CustomerService() {} // add methods here  // 1.</description>
+    </item>
+    
     <item>
       <title>SwiftUI初體驗！ List &#43; Dcard API</title>
       <link>https://Humberto1015.github.io/blog/post-4/</link>

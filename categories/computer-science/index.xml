@@ -6,7 +6,28 @@
     <description>Recent content in Computer Science on Han&#39;s Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-tw</language>
-    <lastBuildDate>Sat, 10 Jul 2021 13:21:47 +0800</lastBuildDate><atom:link href="https://Humberto1015.github.io/categories/computer-science/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 02 May 2022 22:40:03 +0800</lastBuildDate><atom:link href="https://Humberto1015.github.io/categories/computer-science/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>淺談Singleton Pattern</title>
+      <link>https://Humberto1015.github.io/blog/post-5/</link>
+      <pubDate>Mon, 02 May 2022 22:40:03 +0800</pubDate>
+      
+      <guid>https://Humberto1015.github.io/blog/post-5/</guid>
+      <description>假設我們正在開發後端的某些功能，需要一個Object來提供給客戶的服務：像是新增用戶、取得用戶資料、取得所有用戶等等，我們可以把這些功能都包在一個叫CustomerService的Class裡。
+0 1 2 3 4 5 6 7 8  public class CustomerService { private static final LinkedList&amp;lt;Customer&amp;gt; customers = new LinkedList&amp;lt;&amp;gt;(); public CustomerService() {} // add methods here  // 1.</description>
+    </item>
+    
+    <item>
+      <title>SwiftUI初體驗！ List &#43; Dcard API</title>
+      <link>https://Humberto1015.github.io/blog/post-4/</link>
+      <pubDate>Sun, 25 Jul 2021 13:21:47 +0800</pubDate>
+      
+      <guid>https://Humberto1015.github.io/blog/post-4/</guid>
+      <description>目標 既然是第一個APP，那就用Dcard API來撈一些資料，並使用SwiftUI來呈現這些資料吧！
+View 的部分 View的部分，我使用了List來呈現利用Dcard API撈到的文章標題。 NetworkManager 是我用來處理API抓取資料的事情，後面會提到。
+0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21  struct ContentView: View { @ObservedObject var networkManager = NetworkManager() var body: some View { NavigationView { List(networkManager.</description>
+    </item>
+    
     <item>
       <title>Median Handler</title>
       <link>https://Humberto1015.github.io/blog/post-3/</link>
@@ -14,6 +35,16 @@
       
       <guid>https://Humberto1015.github.io/blog/post-3/</guid>
       <description>題目簡介 要你設計一個Handler，必須包含兩個方法： insert 與 getMedian 。 insert 方法可以用來新增integer到我們的資料結構內，而題目要求 getMedian 方法必須在O(1)的時間複雜度內回傳資料結構中的中位數。</description>
+    </item>
+    
+    <item>
+      <title>Min Heap Construction</title>
+      <link>https://Humberto1015.github.io/blog/post-1/</link>
+      <pubDate>Sun, 27 Jun 2021 14:33:47 +0800</pubDate>
+      
+      <guid>https://Humberto1015.github.io/blog/post-1/</guid>
+      <description>我對於Heap的認知是：是一棵加上constraints的binary tree，以Min-Heap為例，要求每一個node的值要比其child node的值小。由於是complete binary tree，所以給定一個node的index，可輕易算出child nodes的index，適合用Array來保存。
+Basic Operations  push()：新增一個元素到Min Heap，需要做heapify來將整棵binary tree重新調整成Min Heap，時間複雜度為O(logn)。 pop()：彈出Min Heap中的最小元素，需要做heapify來將整棵binary tree重新調整成Min Heap，時間複雜度為O(logn)。 peak()：回傳Min Heap中最小的元素，時間複雜度為O(1)。 heapify()：將整棵binary tree重新調整成Min Heap，時間複雜度為O(logn)。  Implementation 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82  #include &amp;lt;iostream&amp;gt;#include &amp;lt;vector&amp;gt; using namespace std; class MinHeap { public: // constructor 	MinHeap(int size) { capacity = size; lastIndex = -1; heap.</description>
     </item>
     
   </channel>
